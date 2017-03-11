@@ -1,8 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Map;
-
+import java.util.*;
 import japa.parser.ast.type.ClassOrInterfaceType;
 import net.sourceforge.plantuml.SourceStringReader;
 
@@ -11,7 +8,6 @@ public class UMLGeneratorInputCreator {
 	private String UMLGeneratorInp;
 	
 	public UMLGeneratorInputCreator(){
-		//this.lstClasses = new ArrayList<ClassInformation>();
 	}
 	
 	public void setUMLGeneratorInp(String str){
@@ -21,35 +17,27 @@ public class UMLGeneratorInputCreator {
 		return UMLGeneratorInp;
 	}
 	
-	public void formGeneratorString(Hashtable<String, ClassInformation> mapClassNameToInfo) throws IOException{
+	public void formGeneratorString(Hashtable<String, ClassInformation> mapClassNameToInfo,ArrayList<RelationshipInformation> lstRelDetails) throws IOException{
 		this.lstClasses= new ArrayList<ClassInformation> (mapClassNameToInfo.values());
 		
 		UMLGeneratorInp = "@startuml\n";
 		UMLGeneratorInp += "skinparam classAttributeIconSize 0\n";
 		
-		findOtherRelationships(mapClassNameToInfo);
+		//ADD RELATIONSHIP DETAILS
+		if(lstRelDetails.size()>0){
+			for(RelationshipInformation r: lstRelDetails){
+				//UMLGeneratorInp +=c.name+" --|> "+cls.getName()+"\n";
+				UMLGeneratorInp +=r.getSrcCls()+" "+r.getRel()+" "+r.getDestCls()+"\n";
+			}
+		}
+
+		
 		for(ClassInformation c: this.lstClasses){
 			//System.out.println("********in uml generator class info= "+c.name+" is interface= "+c.isInterface + " inherited classes= "+c.lstInheritedClasses+" implemented classes= "+c.lstImplementedClasses);
 			//Add interface declarations
 			if(c.isInterface)
 				UMLGeneratorInp +="interface "+c.name+"\n";
-			
-			//Inheritance
-			if(c.lstInheritedClasses.size()>0){
-				for(ClassOrInterfaceType cls:c.lstInheritedClasses){
-					UMLGeneratorInp +=c.name+" --|> "+cls.getName()+"\n";
-				}
-				
-			}
-			
-			//Implementation
-			if(c.lstImplementedClasses.size()>0){
-				for(ClassOrInterfaceType cls:c.lstImplementedClasses){
-					UMLGeneratorInp +=c.name+" ..|> "+cls.getName()+"\n";
-				}
-			}
-			
-			
+						
 			//Class details
 			if(c.isInterface)
 				UMLGeneratorInp +="interface "+c.name+" {\n";
@@ -57,7 +45,7 @@ public class UMLGeneratorInputCreator {
 				UMLGeneratorInp +="class "+c.name+" {\n";
 			
 			//Attribute Details
-			for(AttributeInformation a:  c.lstAttributes){
+			for(AttributeInformation a:  c.mapAttributes.values()){
 				//Access specifier
 				if(a.getAccessSpecifier() == Constants.privateModifier)
 					UMLGeneratorInp +="- ";
@@ -68,20 +56,34 @@ public class UMLGeneratorInputCreator {
 				UMLGeneratorInp +=a.getName();
 				
 				//Attribute data type
-				if(a.getType()!=null)
-					UMLGeneratorInp +=" : "+a.getType()+"\n";
+				if(a.getType()!=null && a.getType().toString()!=null)
+					UMLGeneratorInp +=" : "+a.getType().toString()+"\n";
 				else
 					UMLGeneratorInp +="\n";
 			}
 			
 			//Method details
-			for(MethodInformation m:  c.lstMethods){
-				//Access specifier
+			for(MethodInformation m:  c.mapMethods.values()){
+				//Set + for public methods
 				if(m.getAccessSpecifier() == Constants.publicModifier)
 					UMLGeneratorInp +="+ ";
 				
 				//Method Name
-				UMLGeneratorInp +=m.getName()+"()";
+				UMLGeneratorInp +=m.getName();
+				
+				//Method params
+				if(m.getParams().size()>0){
+					UMLGeneratorInp +="(";
+					for(AttributeInformation p: m.getParams()){
+						UMLGeneratorInp +=p.getName()+":"+p.getType().toString()+",";
+					}
+					//remove last ','
+					UMLGeneratorInp = UMLGeneratorInp.substring(0, (UMLGeneratorInp.length()-1));
+					UMLGeneratorInp +=")";
+				}
+				else{
+					UMLGeneratorInp +="()";
+				}
 				
 				//Method return type
 				if(m.getReturnType()!=null)
@@ -91,7 +93,6 @@ public class UMLGeneratorInputCreator {
 			}
 			
 			UMLGeneratorInp +=" }\n";
-			//System.out.println("After class "+c.name+" generator inp= "+UMLGeneratorInp);
 		}
 		
 		UMLGeneratorInp +=" @enduml\n";
@@ -109,22 +110,6 @@ public class UMLGeneratorInputCreator {
 		System.out.println("Done!");
 		
 		
-	}
-	
-	private void findOtherRelationships(Hashtable<String, ClassInformation> mapClassNameToInfo){
-		
-		for(ClassInformation c: this.lstClasses){
-			//Check if class has an attribute of type another class
-			for(AttributeInformation a:  c.lstAttributes){
-				if(a.getType()!=null){
-					//check if type of attribute is same as another class
-					if(mapClassNameToInfo.containsKey(a.getType()) && a.getType()!=c.name){
-						UMLGeneratorInp +=c.name+"--"+a.getType()+"\n";
-					}
-				}
-			}
-			
-		}
 	}
 	
 }
