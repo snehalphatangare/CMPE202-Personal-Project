@@ -1,30 +1,26 @@
-import japa.parser.JavaParser;
-import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.Parameter;
-import japa.parser.ast.body.VariableDeclarator;
-import japa.parser.ast.expr.Expression;
-//import japa.parser.ast.body.MethodDeclaration;
-//import japa.parser.ast.body.MethodDeclaration;
+import japa.parser.ast.type.ReferenceType;
+import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
-import java.io.*;
-import java.util.List;
-import java.util.Optional;
 
 public class AttributeInformation extends VoidVisitorAdapter<Void> {
 	private String name;
-	private String type;
+	private Type type;
 	private String accessSpecifier;
 	//private Optional<Expression> initialization;
 	
 	public String getName(){
 		return this.name;
 	}
-	public String getType(){
+	public Type getType(){
 		return this.type;
 	}
 	public String getAccessSpecifier(){
 		return this.accessSpecifier;
+	}
+	public void setAccessSpecifier(String scope){
+		this.accessSpecifier=scope;
 	}
 	
 	public AttributeInformation(){
@@ -32,7 +28,7 @@ public class AttributeInformation extends VoidVisitorAdapter<Void> {
 	}
 	public AttributeInformation(Parameter param){
 		this.name=param.getId().toString();
-		this.type=param.getType().toString();
+		this.type=param.getType();
 		
 	}
 	
@@ -49,7 +45,6 @@ public class AttributeInformation extends VoidVisitorAdapter<Void> {
    @Override
    public void visit(FieldDeclaration n, Void arg) {
       
-     //this.name=n.toString();
     String str= n.getVariables().toString();
     str = str.replaceAll("\\[", "").replaceAll("\\]","");
     if(str.contains("=")){
@@ -58,11 +53,17 @@ public class AttributeInformation extends VoidVisitorAdapter<Void> {
     }else
     	this.name=str;
     
-     this.type=n.getType().toString();
+     this.type=n.getType();
      this.accessSpecifier = Utility.getAccessSpecifier(n.getModifiers());
      
-     
-     
    }
+   
+   //Checks if attribute is of Reference Data type
+  /* public Boolean isReferenceDataType(AttributeInformation a){
+	  // Boolean isReferenceDT=false;
+	   Type dt=a.getType();
+	   //dt.
+		return false;	   
+   }*/
    
 }
