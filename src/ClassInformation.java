@@ -7,17 +7,19 @@ import java.util.*;
 public class ClassInformation extends VoidVisitorAdapter<Void> {
 	public String name;
 	public Boolean isInterface;
-	public ArrayList<AttributeInformation> lstAttributes;
-	public ArrayList<MethodInformation> lstMethods;
+	public Hashtable<String, AttributeInformation> mapAttributes;
+	public Hashtable<String, MethodInformation> mapMethods;
 	public List<ClassOrInterfaceType> lstInheritedClasses;
 	public List<ClassOrInterfaceType> lstImplementedClasses;
-	public HashMap methodCalls;
+	//public ArrayList<RelationshipInformation> lstRelDetails;
+	//public HashMap methodCalls;
 	
 	public ClassInformation( ) {
-		lstAttributes = new ArrayList<AttributeInformation>();
-		lstMethods= new ArrayList<MethodInformation>();
+		mapAttributes = new Hashtable<String, AttributeInformation>();
+		mapMethods= new Hashtable<String, MethodInformation>();
 		lstInheritedClasses = new ArrayList<ClassOrInterfaceType>();
 		lstImplementedClasses = new ArrayList<ClassOrInterfaceType>();
+		//lstRelDetails = new ArrayList<RelationshipInformation>();
 	}
 	
 	public ClassInformation getClassInformation (ClassOrInterfaceDeclaration clsDec) throws Exception{
@@ -30,20 +32,28 @@ public class ClassInformation extends VoidVisitorAdapter<Void> {
 		visit(clsDec, null);
 		
 		List<BodyDeclaration> members = clsDec.getMembers();
+		//Get details of all variables declared in class
+		for (BodyDeclaration member : members) {
+            if (member instanceof FieldDeclaration) {
+            	FieldDeclaration attributeDec = (FieldDeclaration) member;
+            	AttributeInformation a=new AttributeInformation().getAttributeInformation(attributeDec);
+            	//Only Show Public and Private Attributes
+            	if(a.getAccessSpecifier()!=null)
+            		this.mapAttributes.put(a.getName(),a);
+            }
+		}
+		//Get details of all methods in class
 		for (BodyDeclaration member : members) {
             if (member instanceof MethodDeclaration) {
             	MethodDeclaration methodDec = (MethodDeclaration) member;
             	MethodInformation m=new MethodInformation().getMethodInformation(methodDec);
-				this.lstMethods.add(m);
+            	//Add a method only if it is a public method AND is not a getter/setter method. 
+            	if(m.getAccessSpecifier() == Constants.publicModifier && !m.isGetterOrSetterMethod(m,this.mapAttributes))
+            		this.mapMethods.put(m.getName(),m);
+            		
             }
-            if (member instanceof FieldDeclaration) {
-            	FieldDeclaration attributeDec = (FieldDeclaration) member;
-            	AttributeInformation a=new AttributeInformation().getAttributeInformation(attributeDec);
-            	if(a.getAccessSpecifier()!=null)
-            		this.lstAttributes.add(a);
-            }
-
 		}
+		
 		
 		return this;
 	}
@@ -64,5 +74,10 @@ public class ClassInformation extends VoidVisitorAdapter<Void> {
      //Visit inner classes
       super.visit(n, arg);
     }
+    
+    /*public void setRelationshipInfo(ClassInformation currentCls,Hashtable<String, ClassInformation> mapClassNameToInfo){
+    	RelationshipInformation r= new RelationshipInformation();
+    	currentCls.lstRelDetails= r.createRelationshipDetails(currentCls, mapClassNameToInfo);
+    }*/
     
 }
