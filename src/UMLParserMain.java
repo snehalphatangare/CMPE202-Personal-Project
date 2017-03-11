@@ -12,10 +12,12 @@ public class UMLParserMain {
 	private static String outputFileName;
 	public static Hashtable<String, ClassInformation> mapClassNameToInfo;
 	public static ArrayList<ClassInformation> lstClasses;
+	public static ArrayList<RelationshipInformation> lstRelDetails;
 
 	public static void main(String[] args) throws Exception {
 		mapClassNameToInfo = new Hashtable<String, ClassInformation>();
 		lstClasses = new ArrayList<ClassInformation>();
+		lstRelDetails = new ArrayList<RelationshipInformation>();
 		
 /*		System.out.println("Program Arguments:");
 		if(args.length > 0){
@@ -38,7 +40,7 @@ public class UMLParserMain {
 		
 		
 		//HARDCODED ARGUMENTS
-		srcFolderName="C:/Semester I/CMPE202/cmpe202-master/umlparser/uml-parser-test-2";
+		srcFolderName="C:/Semester I/CMPE202/cmpe202-master/umlparser/uml-parser-test-1";
 		
 		//Process all .java files in srcFolder
 		File folder = new File(srcFolderName);
@@ -58,17 +60,18 @@ public class UMLParserMain {
 						ClassInformation c=new ClassInformation().getClassInformation(classDec);
 						lstClasses.add(c);
 						mapClassNameToInfo.put(c.name, c);
+				    	//currentCls.lstRelDetails= r.createRelationshipDetails(currentCls, mapClassNameToInfo);
 						System.out.println("********class info= "+c.name+" is interface= "+c.isInterface + " inherited classes= "+c.lstInheritedClasses+" implemented classes= "+c.lstImplementedClasses);
 					}
 				}
-				
-				
 			}
 		}
+		//Update lstRelDetails
+		lstRelDetails= new RelationshipInformation().createRelationshipDetails(mapClassNameToInfo);
 		
 		//Form Plant UML generator Input
 		UMLGeneratorInputCreator u=new UMLGeneratorInputCreator();
-		u.formGeneratorString(mapClassNameToInfo);
+		u.formGeneratorString(mapClassNameToInfo,lstRelDetails);
 		
 		//Call to PlantUML
 
