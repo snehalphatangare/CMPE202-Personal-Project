@@ -59,5 +59,26 @@ public class MethodInformation extends VoidVisitorAdapter<Void> {
      //Visit inner classes
       super.visit(n, arg);
     }
+    
+    public Boolean isGetterOrSetterMethod(MethodInformation m,Hashtable<String, AttributeInformation> mapAttributes){
+    	String methodName=m.getName();
+    	if(methodName.startsWith("get") || methodName.startsWith("set")){
+    		String varName=methodName.substring(3);
+    		
+    		//Check if class has this variable
+    		for(String a: mapAttributes.keySet()){
+	    		if(a.toLowerCase().equals(varName.toLowerCase())){
+	    			System.out.println("*********This is a getter/setter="+methodName);
+	    			//Change variable scope to PUBLIC
+	    			AttributeInformation attInfo=mapAttributes.get(a);
+	    			attInfo.setAccessSpecifier(Constants.publicModifier);
+	    			mapAttributes.put(a, attInfo);
+	    			return true;	
+	    		}
+    		}
+    			
+    	}
+    	return false;
+    }
 
 }
