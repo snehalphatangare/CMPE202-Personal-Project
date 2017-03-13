@@ -59,7 +59,28 @@ public class RelationshipInformation {
 			}
 		}
 		
-		
+		for(ClassInformation c: mapClassNameToInfo.values()){
+			System.out.println("***********For class "+c.name);
+			//Check if current class has an attribute of type another class
+			//Iterate on attributes of current class
+			for(AttributeInformation a:  c.mapAttributes.values()){
+				System.out.println("***********For attribute "+a.getName());
+				if(a.getType()!=null && a.getType().toString()!=null){
+					
+					String attributeDT="";
+					//If attribute is of type reference get the reference Data Type
+					if(a.getType() instanceof ReferenceType){
+						String strDT=a.getType().toString();
+						if(strDT.contains("<") && strDT.contains(">")){
+							attributeDT=strDT.substring((strDT.indexOf("<")+1),strDT.indexOf(">"));
+						}
+						else
+							attributeDT=strDT;
+						System.out.println("***********Attribute DT="+attributeDT);
+					}
+				}
+			}
+}
 		
 		return lstRel;
 	}
