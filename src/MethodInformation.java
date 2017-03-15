@@ -2,6 +2,8 @@ import japa.parser.ast.body.*;
 //import japa.parser.ast.body.MethodDeclaration;
 //import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
+
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 public class MethodInformation extends VoidVisitorAdapter<Void> {
@@ -40,13 +42,22 @@ public class MethodInformation extends VoidVisitorAdapter<Void> {
 		 System.out.println("****Method Info="+this.name+" access specifier="+this.accessSpecifier+" return type="+this.returnType+" method params="+this.params);
 		return this;
 	}
-
+	
+	public MethodInformation getConstructorInformation (ConstructorDeclaration constructorDec) throws Exception{
+		 //System.out.println("****Method name="+methodDec.getName());
+		// visit and print the constructor names
+		visit(constructorDec, null);
+		
+		 System.out.println("****Constructor Info="+this.name+" access specifier="+this.accessSpecifier+" constructor params="+this.params);
+		return this;
+	}
 	
     @Override
     public void visit(MethodDeclaration n, Void arg) {
-       
+    	System.out.println("method name "+n.getName());
       this.name=n.getName();
       this.accessSpecifier = Utility.getAccessSpecifier(n.getModifiers());
+      System.out.println("method access specifier "+Modifier.toString(n.getModifiers()));
       this.returnType = n.getType().toString();
       
       //Method parameter information
@@ -58,6 +69,22 @@ public class MethodInformation extends VoidVisitorAdapter<Void> {
       
      //Visit inner classes
       super.visit(n, arg);
+    }
+    
+    @Override
+    public void visit(ConstructorDeclaration n, Void arg) {
+      this.name=n.getName();
+      this.accessSpecifier = Utility.getAccessSpecifier(n.getModifiers());
+      
+      //Method parameter information
+      List<Parameter> params= n.getParameters();
+      if(params !=null && params.size()>0){
+    	  for(int i=0;i < params.size();i++)
+    		  this.params.add(new AttributeInformation((Parameter) params.get(i)));
+      }
+      
+   /*  //Visit inner classes
+      super.visit(n, arg);*/
     }
     
     public Boolean isGetterOrSetterMethod(MethodInformation m,Hashtable<String, AttributeInformation> mapAttributes){
