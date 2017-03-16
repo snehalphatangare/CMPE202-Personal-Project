@@ -23,11 +23,6 @@ public class ClassInformation extends VoidVisitorAdapter<Void> {
 	}
 	
 	public ClassInformation getClassInformation (ClassOrInterfaceDeclaration clsDec) throws Exception{
-		// parse file
-	//	CompilationUnit cu = JavaParser.parse(in);
-		// visit and print the methods names
-		// new MethodVisitor().visit(cu, null);    	
-
 		
 		visit(clsDec, null);
 		
@@ -42,7 +37,7 @@ public class ClassInformation extends VoidVisitorAdapter<Void> {
             		this.mapAttributes.put(a.getName(),a);
             }
 		}
-		//Get details of all methods in class
+		//Get details of all constructors,methods in class
 		for (BodyDeclaration member : members) {
             if (member instanceof MethodDeclaration) {
             	MethodDeclaration methodDec = (MethodDeclaration) member;
@@ -50,6 +45,12 @@ public class ClassInformation extends VoidVisitorAdapter<Void> {
             	//Add a method only if it is a public method AND is not a getter/setter method. 
             	if(m.getAccessSpecifier() == Constants.publicModifier && !m.isGetterOrSetterMethod(m,this.mapAttributes))
             		this.mapMethods.put(m.getName(),m);
+            		
+            }
+            if (member instanceof ConstructorDeclaration) {
+            	ConstructorDeclaration constDec = (ConstructorDeclaration) member;
+            	MethodInformation m=new MethodInformation().getConstructorInformation(constDec);
+          		this.mapMethods.put(m.getName(),m);
             		
             }
 		}
@@ -70,7 +71,6 @@ public class ClassInformation extends VoidVisitorAdapter<Void> {
       if(n.getImplements()!=null)
     	  this.lstImplementedClasses=n.getImplements();
      
-      
      //Visit inner classes
       super.visit(n, arg);
     }
