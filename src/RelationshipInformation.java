@@ -78,9 +78,33 @@ public class RelationshipInformation {
 							attributeDT=strDT;
 						System.out.println("***********Attribute DT="+attributeDT);
 					}
+					//If type of attribute is same as another class
+					if(mapClassNameToInfo.containsKey(attributeDT) && !attributeDT.equalsIgnoreCase(c.name)){
+						//Boolean createNewRelation=false;
+						Boolean createNewRelation=true;
+						
+						String secondCls=attributeDT;
+						System.out.println("++++++++++relationships till now");
+						if(lstRel.size() > 0){
+							for(RelationshipInformation r:lstRel){
+								System.out.println("+++++++++ "+r.srcCls+" "+r.destCls);
+							}
+						}
+						System.out.println("***********This class && secondCls "+c.name+"  "+secondCls);
+						//Before creating relationship check if a relationship between two classes already exists
+						RelationshipInformation newRel = new RelationshipInformation();
+						if(lstRel.size() > 0){
+						System.out.println("***********secondCls "+secondCls);
+																			}
+						}					
+						//Add new relation if was created
+						//System.out.println("+++++++");
+						if(createNewRelation)
+							lstRel.add(newRel);
+					}
 				}
 			}
-}
+		}
 		
 		return lstRel;
 	}
