@@ -32,9 +32,7 @@ public class ClassInformation extends VoidVisitorAdapter<Void> {
             if (member instanceof FieldDeclaration) {
             	FieldDeclaration attributeDec = (FieldDeclaration) member;
             	AttributeInformation a=new AttributeInformation().getAttributeInformation(attributeDec);
-            	//Only Show Public and Private Attributes
-            	if(a.getAccessSpecifier()!=null)
-            		this.mapAttributes.put(a.getName(),a);
+            	this.mapAttributes.put(a.getName(),a);
             }
 		}
 		//Get details of all constructors,methods in class
