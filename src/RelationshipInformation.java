@@ -94,9 +94,32 @@ public class RelationshipInformation {
 						//Before creating relationship check if a relationship between two classes already exists
 						RelationshipInformation newRel = new RelationshipInformation();
 						if(lstRel.size() > 0){
-						System.out.println("***********secondCls "+secondCls);
-																			}
-						}					
+							System.out.println("***********secondCls "+secondCls);
+							for(RelationshipInformation r:lstRel){
+								if((r.srcCls.equals(c.name) && r.destCls.equals(secondCls)) || (r.srcCls.equals(secondCls) && r.destCls.equals(c.name))){
+									//Relation already exists
+									createNewRelation=false;
+									System.out.println("***********REL exists");
+									break;
+								}/*else{
+									createNewRelation=true;
+									newRel = new RelationshipInformation(c.name,secondCls,"--",null);
+									System.out.println("++++++++++++ASSOCIATION REL created between "+c.name+' '+secondCls);
+									break;
+								}*/
+							}
+							//no existing relationship found, create one
+							//createNewRelation=true;
+							newRel = new RelationshipInformation(c.name,secondCls,"--",null);
+							System.out.println("++++++++++++ASSOCIATION REL created between "+c.name+' '+secondCls);
+						}
+						else{
+							System.out.println("**********this is 1st relationship for this useCase");
+							//createNewRelation=true;
+							newRel = new RelationshipInformation(c.name,secondCls,"--",null);
+							System.out.println("***********ASSOCIATION REL created between "+c.name+' '+secondCls);
+						}
+						
 						//Add new relation if was created
 						//System.out.println("+++++++");
 						if(createNewRelation)
