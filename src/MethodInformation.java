@@ -56,6 +56,7 @@ public class MethodInformation extends VoidVisitorAdapter<Void> {
     public void visit(MethodDeclaration n, Void arg) {
     	System.out.println("method name "+n.getName());
       this.name=n.getName();
+      this.isConstructor=false;
       this.accessSpecifier = Utility.getAccessSpecifier(n.getModifiers());
       System.out.println("method access specifier "+Modifier.toString(n.getModifiers()));
       this.returnType = n.getType().toString();
@@ -74,6 +75,7 @@ public class MethodInformation extends VoidVisitorAdapter<Void> {
     @Override
     public void visit(ConstructorDeclaration n, Void arg) {
       this.name=n.getName();
+      this.isConstructor=true;
       this.accessSpecifier = Utility.getAccessSpecifier(n.getModifiers());
       
       //Method parameter information
