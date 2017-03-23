@@ -9,20 +9,23 @@ public class RelationshipInformation {
 	private String destCls;
 	//Relationship between classes defined by symbols 
 	private String rel;
-	//Multiplicity between classes defined as 0..*
-	private String mutiplicity; 
+	//Multiplicity between classes defined as 0,*,1
+	private String srcMutiplicity; 
+	private String destMutiplicity;
 	
 	public RelationshipInformation(){
 		this.srcCls="";
 		this.destCls="";
 		this.rel="";
-		this.mutiplicity=null;
+		this.srcMutiplicity=null;
+		this.destMutiplicity=null;
 	}
-	public RelationshipInformation(String src,String dest,String relation,String mul){
+	public RelationshipInformation(String src,String dest,String relation,String srcMul,String destMul){
 		this.srcCls=src;
 		this.destCls=dest;
 		this.rel=relation;
-		this.mutiplicity=mul;
+		this.srcMutiplicity=srcMul;
+		this.destMutiplicity=destMul;
 	}
 	
 	public String getSrcCls(){
@@ -35,8 +38,11 @@ public class RelationshipInformation {
 	public String getRel(){
 		return this.rel;
 	}
-	public String getMultiplicity(){
-		return this.mutiplicity;
+	public String getSrcMultiplicity(){
+		return this.srcMutiplicity;
+	}
+	public String getDestMultiplicity(){
+		return this.destMutiplicity;
 	}
 	
 	public ArrayList<RelationshipInformation> createRelationshipDetails(Hashtable<String, ClassInformation> mapClassNameToInfo){
