@@ -11,12 +11,11 @@ public class UMLParserMain {
 	private static String srcFolderName;
 	private static String outputFileName;
 	public static Hashtable<String, ClassInformation> mapClassNameToInfo;
-	public static ArrayList<ClassInformation> lstClasses;
-	public static ArrayList<RelationshipInformation> lstRelDetails;
+		public static ArrayList<RelationshipInformation> lstRelDetails;
 
 	public static void main(String[] args) throws Exception {
 		mapClassNameToInfo = new Hashtable<String, ClassInformation>();
-		lstClasses = new ArrayList<ClassInformation>();
+		
 		lstRelDetails = new ArrayList<RelationshipInformation>();
 		
 /*		System.out.println("Program Arguments:");
@@ -58,7 +57,7 @@ public class UMLParserMain {
 					if (type instanceof ClassOrInterfaceDeclaration) {
 						ClassOrInterfaceDeclaration classDec = (ClassOrInterfaceDeclaration) type;
 						ClassInformation c=new ClassInformation().getClassInformation(classDec);
-						lstClasses.add(c);
+						
 						mapClassNameToInfo.put(c.name, c);
 				    	//currentCls.lstRelDetails= r.createRelationshipDetails(currentCls, mapClassNameToInfo);
 						System.out.println("********class info= "+c.name+" is interface= "+c.isInterface + " inherited classes= "+c.lstInheritedClasses+" implemented classes= "+c.lstImplementedClasses);
