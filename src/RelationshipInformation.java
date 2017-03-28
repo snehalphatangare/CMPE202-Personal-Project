@@ -9,23 +9,19 @@ public class RelationshipInformation {
 	private String destCls;
 	//Relationship between classes defined by symbols 
 	private String rel;
-	//Multiplicity between classes defined as 0,*,1
-	private String srcMutiplicity; 
-	private String destMutiplicity;
-	
+	private String mult;
+		
 	public RelationshipInformation(){
 		this.srcCls="";
 		this.destCls="";
 		this.rel="";
-		this.srcMutiplicity=null;
-		this.destMutiplicity=null;
 	}
 	public RelationshipInformation(String src,String dest,String relation,String srcMul,String destMul){
 		this.srcCls=src;
 		this.destCls=dest;
 		this.rel=relation;
-		this.srcMutiplicity=srcMul;
-		this.destMutiplicity=destMul;
+		//this.srcMutiplicity=srcMul;
+		//this.destMutiplicity=destMul;
 	}
 	
 	public String getSrcCls(){
