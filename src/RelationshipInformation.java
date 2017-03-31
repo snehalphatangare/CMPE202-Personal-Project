@@ -10,16 +10,19 @@ public class RelationshipInformation {
 	//Relationship between classes defined by symbols 
 	private String rel;
 	private String mult;
+	private String dependency;
 		
 	public RelationshipInformation(){
 		this.srcCls="";
 		this.destCls="";
 		this.rel="";
+		this.dependency="";
 	}
 	public RelationshipInformation(String src,String dest,String relation,String srcMul,String destMul){
 		this.srcCls=src;
 		this.destCls=dest;
 		this.rel=relation;
+		this.dependency=dependency;
 		//this.srcMutiplicity=srcMul;
 		//this.destMutiplicity=destMul;
 	}
@@ -39,6 +42,9 @@ public class RelationshipInformation {
 	}
 	public String getDestMultiplicity(){
 		return this.destMutiplicity;
+	}
+	public String getDependency(){
+		return this.dependency;
 	}
 	
 	public ArrayList<RelationshipInformation> createRelationshipDetails(Hashtable<String, ClassInformation> mapClassNameToInfo){
@@ -103,17 +109,11 @@ public class RelationshipInformation {
 									createNewRelation=false;
 									System.out.println("***********REL exists");
 									break;
-								}/*else{
-									createNewRelation=true;
-									newRel = new RelationshipInformation(c.name,secondCls,"--",null);
-									System.out.println("++++++++++++ASSOCIATION REL created between "+c.name+' '+secondCls);
-									break;
-								}*/
+								}
 							}
 							//no existing relationship found, create one
 							//createNewRelation=true;
 							newRel = new RelationshipInformation(c.name,secondCls,"--",null);
-							System.out.println("++++++++++++ASSOCIATION REL created between "+c.name+' '+secondCls);
 						}
 						else{
 							System.out.println("**********this is 1st relationship for this useCase");
