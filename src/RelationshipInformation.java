@@ -115,13 +115,7 @@ public class RelationshipInformation {
 							//createNewRelation=true;
 							newRel = new RelationshipInformation(c.name,secondCls,"--",null);
 						}
-						else{
-							System.out.println("**********this is 1st relationship for this useCase");
-							//createNewRelation=true;
-							newRel = new RelationshipInformation(c.name,secondCls,"--",null);
-							System.out.println("***********ASSOCIATION REL created between "+c.name+' '+secondCls);
-						}
-						
+											
 						//Add new relation if was created
 						//System.out.println("+++++++");
 						if(createNewRelation)
