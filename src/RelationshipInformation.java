@@ -127,4 +127,20 @@ public class RelationshipInformation {
 		
 		return lstRel;
 	}
+	
+	private Boolean checkRelationshipAlreadyExist(ArrayList<RelationshipInformation> lstRel,String firstCls,String secondCls,String rel){
+		Boolean createNewRelation=true;
+		
+		if(lstRel.size() > 0){
+			for(RelationshipInformation r:lstRel){
+				if(((r.srcCls.equals(firstCls) && r.destCls.equals(secondCls)) || (r.srcCls.equals(secondCls) && r.destCls.equals(firstCls))) && r.rel == rel){
+					//Relation already exists
+					createNewRelation=false;
+					System.out.println("***********REL exists");
+					//return false;
+				}
+			}
+		}
+		return createNewRelation;
+	}
 }
