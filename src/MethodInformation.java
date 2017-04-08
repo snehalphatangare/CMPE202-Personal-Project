@@ -68,8 +68,6 @@ public class MethodInformation extends VoidVisitorAdapter<Void> {
     		  this.params.add(new AttributeInformation((Parameter) params.get(i)));
       }
       
-     //Visit inner classes
-      super.visit(n, arg);
     }
     
     @Override
