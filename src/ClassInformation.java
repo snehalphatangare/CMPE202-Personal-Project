@@ -69,8 +69,6 @@ public class ClassInformation extends VoidVisitorAdapter<Void> {
       if(n.getImplements()!=null)
     	  this.lstImplementedClasses=n.getImplements();
      
-     //Visit inner classes
-      super.visit(n, arg);
     }
     
     /*public void setRelationshipInfo(ClassInformation currentCls,Hashtable<String, ClassInformation> mapClassNameToInfo){
