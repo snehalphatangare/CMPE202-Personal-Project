@@ -75,5 +75,28 @@ public class ClassInformation extends VoidVisitorAdapter<Void> {
     	RelationshipInformation r= new RelationshipInformation();
     	currentCls.lstRelDetails= r.createRelationshipDetails(currentCls, mapClassNameToInfo);
     }*/
+ /*
+     * ** Removes methods in the class which are implemented from implemented classes
+     */
+    public static void removeImplementedMethods(Hashtable<String, ClassInformation> mapClassNameToInfo){
+    	List<String> lstMethodsToRemove = new ArrayList<String>();
+    	for(ClassInformation c: mapClassNameToInfo.values()){
+    		if(!c.isInterface && c.lstImplementedClasses.size()>0){
+    			//Get the list of methods to remove
+    			lstMethodsToRemove = new ArrayList<String>();
+    			for(ClassOrInterfaceType cls: c.lstImplementedClasses){
+        			ClassInformation implementedParentCls = mapClassNameToInfo.get(cls.getName());
+        			for(MethodInformation m : implementedParentCls.mapMethods.values()){
+        				lstMethodsToRemove.add(m.getName());
+        			}
+    			}
+    			//Remove these methods from the class implementing the interface
+    			for(String methodToRemove: lstMethodsToRemove){
+    				if(c.mapMethods.containsKey(methodToRemove))
+    					c.mapMethods.remove(methodToRemove);
+    			}
+        	}
+    	}
+    }
     
 }
