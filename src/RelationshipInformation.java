@@ -125,6 +125,50 @@ public class RelationshipInformation {
 			}
 		}
 		
+		//Dependency Relationships
+		System.out.println("*********Dependency Relationships");
+		for(ClassInformation c: mapClassNameToInfo.values()){
+			//Check if current class has methods with parameter of type another class OR a method in current class initiates object of type another class
+			if(!c.isInterface)
+			{
+				//Iterate on methods of current class
+				for(MethodInformation m:  c.mapMethods.values()){
+					//Check if method has parameter of type another class
+					
+					//Iterate on parameters of current method
+					for(AttributeInformation a:  m.getParams()){
+						System.out.println("***********For attribute "+a.getName()+" in method "+m.getName()+" in class "+c.name);
+						//If attribute is of type reference get the reference Data Type
+						if(a.getType()!=null && a.getType().toString()!=null && Utility.isReferenceTypeVariable(a.getType())){
+							String attributeDT="";
+							String strDT=a.getType().toString();
+							if(strDT.contains("<") && strDT.contains(">")){
+								attributeDT=strDT.substring((strDT.indexOf("<")+1),strDT.indexOf(">"));
+							}
+							else
+								attributeDT=strDT;
+							System.out.println("***********Attribute DT="+attributeDT);
+							String secondCls=attributeDT;
+							
+							//If type of attribute is same as another class and the class it depends on is an Interface
+							if(mapClassNameToInfo.containsKey(attributeDT) && !attributeDT.equalsIgnoreCase(c.name) && mapClassNameToInfo.get(attributeDT).isInterface){
+								//Create dependency relationship between classes
+								if(checkRelationshipAlreadyExist(lstRel,c.name,secondCls,"..>")){
+									RelationshipInformation newRel = new RelationshipInformation(c.name,secondCls,"..>",null,null);
+									lstRel.add(newRel);
+									//Dependency relation created, break out of the loop
+									break;
+								}
+							}
+						}
+					}
+					
+					//Check if method initiates object of type another class
+					
+				}
+			}//IF condition check for interface ends
+		}
+		
 		return lstRel;
 	}
 	
