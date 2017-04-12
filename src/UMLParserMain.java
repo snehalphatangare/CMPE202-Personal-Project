@@ -11,14 +11,15 @@ public class UMLParserMain {
 	private static String srcFolderName;
 	private static String outputFileName;
 	public static Hashtable<String, ClassInformation> mapClassNameToInfo;
-		public static ArrayList<RelationshipInformation> lstRelDetails;
+	public static ArrayList<ClassInformation> lstClasses;
+	public static ArrayList<RelationshipInformation> lstRelDetails;
 
 	public static void main(String[] args) throws Exception {
 		mapClassNameToInfo = new Hashtable<String, ClassInformation>();
-		
+		lstClasses = new ArrayList<ClassInformation>();
 		lstRelDetails = new ArrayList<RelationshipInformation>();
 		
-/*		System.out.println("Program Arguments:");
+		/*System.out.println("Program Arguments:");
 		if(args.length > 0){
 			if(args[0]!=null && args[0]!=""){
 				srcFolderName=args[0];
@@ -26,7 +27,7 @@ public class UMLParserMain {
 				System.out.println("Please provide Source folder argument");
 				System.exit(1);
 			}
-			System.out.println("Source Folder \t" + srcFolderName);
+			System.out.println("Source Folder " + srcFolderName);
 			
 			if(args[1]!=null && args[1]!=""){
 				outputFileName=args[1];
@@ -34,12 +35,12 @@ public class UMLParserMain {
 				System.out.println("Please provide Output file name as argument");
 				System.exit(1);
 			}
-			System.out.println("Output File argument \t" + outputFileName);
+			System.out.println("Output File argument " + outputFileName);
 		}*/
 		
 		
 		//HARDCODED ARGUMENTS
-		srcFolderName="C:/Semester I/CMPE202/cmpe202-master/umlparser/uml-parser-test-1";
+		srcFolderName="C:/Semester I/CMPE202/cmpe202-master/umlparser/uml-parser-test-5";
 		
 		//Process all .java files in srcFolder
 		File folder = new File(srcFolderName);
@@ -57,7 +58,7 @@ public class UMLParserMain {
 					if (type instanceof ClassOrInterfaceDeclaration) {
 						ClassOrInterfaceDeclaration classDec = (ClassOrInterfaceDeclaration) type;
 						ClassInformation c=new ClassInformation().getClassInformation(classDec);
-						
+						lstClasses.add(c);
 						mapClassNameToInfo.put(c.name, c);
 				    	//currentCls.lstRelDetails= r.createRelationshipDetails(currentCls, mapClassNameToInfo);
 						System.out.println("********class info= "+c.name+" is interface= "+c.isInterface + " inherited classes= "+c.lstInheritedClasses+" implemented classes= "+c.lstImplementedClasses);
@@ -67,6 +68,9 @@ public class UMLParserMain {
 		}
 		//Update lstRelDetails
 		lstRelDetails= new RelationshipInformation().createRelationshipDetails(mapClassNameToInfo);
+		
+		//Remove implemented methods from classes
+		ClassInformation.removeImplementedMethods(mapClassNameToInfo);
 		
 		//Form Plant UML generator Input
 		UMLGeneratorInputCreator u=new UMLGeneratorInputCreator();
