@@ -75,6 +75,15 @@ public class ClassInformation extends VoidVisitorAdapter<Void> {
     	RelationshipInformation r= new RelationshipInformation();
     	currentCls.lstRelDetails= r.createRelationshipDetails(currentCls, mapClassNameToInfo);
     }*/
+private Boolean isImplementedFromInterface(MethodInformation m){
+    	if(!this.isInterface && this.lstImplementedClasses.size()>0){
+    		for(ClassOrInterfaceType cls: this.lstImplementedClasses){
+				//for(MethodInformation m: cls)
+			}
+    	}
+    	
+    	return false;
+    }
  /*
      * ** Removes methods in the class which are implemented from implemented classes
      */
