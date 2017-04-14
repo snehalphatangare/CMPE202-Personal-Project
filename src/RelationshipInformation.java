@@ -133,8 +133,12 @@ public class RelationshipInformation {
 			{
 				//Iterate on methods of current class
 				for(MethodInformation m:  c.mapMethods.values()){
-					//Check if method has parameter of type another class
+					if(m.getName().equalsIgnoreCase("main")){
+						RelationshipInformation newRel = new RelationshipInformation(c.name,"Component","..>",null,null);
+						lstRel.add(newRel);
+					}
 					
+					//Check if method has parameter of type another class
 					//Iterate on parameters of current method
 					for(AttributeInformation a:  m.getParams()){
 						System.out.println("***********For attribute "+a.getName()+" in method "+m.getName()+" in class "+c.name);
@@ -162,9 +166,7 @@ public class RelationshipInformation {
 							}
 						}
 					}
-					
 					//Check if method initiates object of type another class
-					
 				}
 			}//IF condition check for interface ends
 		}
