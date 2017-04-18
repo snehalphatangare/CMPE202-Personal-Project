@@ -9,22 +9,23 @@ public class RelationshipInformation {
 	private String destCls;
 	//Relationship between classes defined by symbols 
 	private String rel;
-	private String mult;
-	private String dependency;
-		
+	//Multiplicity between classes defined as 0,*,1
+	private String srcMutiplicity; 
+	private String destMutiplicity;
+	
 	public RelationshipInformation(){
 		this.srcCls="";
 		this.destCls="";
 		this.rel="";
-		this.dependency="";
+		this.srcMutiplicity=null;
+		this.destMutiplicity=null;
 	}
 	public RelationshipInformation(String src,String dest,String relation,String srcMul,String destMul){
 		this.srcCls=src;
 		this.destCls=dest;
 		this.rel=relation;
-		this.dependency=dependency;
-		//this.srcMutiplicity=srcMul;
-		//this.destMutiplicity=destMul;
+		this.srcMutiplicity=srcMul;
+		this.destMutiplicity=destMul;
 	}
 	
 	public String getSrcCls(){
@@ -43,9 +44,6 @@ public class RelationshipInformation {
 	public String getDestMultiplicity(){
 		return this.destMutiplicity;
 	}
-	public String getDependency(){
-		return this.dependency;
-	}
 	
 	public ArrayList<RelationshipInformation> createRelationshipDetails(Hashtable<String, ClassInformation> mapClassNameToInfo){
 		ArrayList<RelationshipInformation> lstRel = new ArrayList<RelationshipInformation>();
@@ -54,19 +52,22 @@ public class RelationshipInformation {
 			//Inheritance Relationships
 			if(c.lstInheritedClasses.size()>0){
 				for(ClassOrInterfaceType cls:c.lstInheritedClasses){
-					RelationshipInformation r = new RelationshipInformation(cls.getName(),c.name,"<|--",null);
+					RelationshipInformation r = new RelationshipInformation(cls.getName(),c.name,"<|--",null,null);
 					lstRel.add(r);
 				}
 			}
 			//Implementation Relationships
 			if(c.lstImplementedClasses.size()>0){
 				for(ClassOrInterfaceType cls:c.lstImplementedClasses){
-					RelationshipInformation r = new RelationshipInformation(cls.getName(),c.name,"<|..",null);
+					RelationshipInformation r = new RelationshipInformation(cls.getName(),c.name,"<|..",null,null);
 					lstRel.add(r);
 				}
 			}
 		}
 		
+		
+		//Association Relationships
+		System.out.println("*********Association Relationships");
 		for(ClassInformation c: mapClassNameToInfo.values()){
 			System.out.println("***********For class "+c.name);
 			//Check if current class has an attribute of type another class
@@ -76,57 +77,56 @@ public class RelationshipInformation {
 				if(a.getType()!=null && a.getType().toString()!=null){
 					
 					String attributeDT="";
+					String destMultiplicity=null;
 					//If attribute is of type reference get the reference Data Type
 					if(a.getType() instanceof ReferenceType){
 						String strDT=a.getType().toString();
 						if(strDT.contains("<") && strDT.contains(">")){
 							attributeDT=strDT.substring((strDT.indexOf("<")+1),strDT.indexOf(">"));
+							destMultiplicity="*";
 						}
-						else
+						else{
 							attributeDT=strDT;
-						System.out.println("***********Attribute DT="+attributeDT);
+							//destMultiplicity="1";
+						}
 					}
 					//If type of attribute is same as another class
 					if(mapClassNameToInfo.containsKey(attributeDT) && !attributeDT.equalsIgnoreCase(c.name)){
-						//Boolean createNewRelation=false;
 						Boolean createNewRelation=true;
 						
 						String secondCls=attributeDT;
-						System.out.println("++++++++++relationships till now");
-						if(lstRel.size() > 0){
-							for(RelationshipInformation r:lstRel){
-								System.out.println("+++++++++ "+r.srcCls+" "+r.destCls);
-							}
-						}
 						System.out.println("***********This class && secondCls "+c.name+"  "+secondCls);
 						//Before creating relationship check if a relationship between two classes already exists
 						RelationshipInformation newRel = new RelationshipInformation();
 						if(lstRel.size() > 0){
 							System.out.println("***********secondCls "+secondCls);
 							for(RelationshipInformation r:lstRel){
-								if((r.srcCls.equals(c.name) && r.destCls.equals(secondCls)) || (r.srcCls.equals(secondCls) && r.destCls.equals(c.name))){
+								if(((r.srcCls.equals(c.name) && r.destCls.equals(secondCls)) || (r.srcCls.equals(secondCls) && r.destCls.equals(c.name))) && r.rel=="--"){
 									//Relation already exists
 									createNewRelation=false;
 									System.out.println("***********REL exists");
 									break;
 								}
 							}
-							//no existing relationship found, create one
-							//createNewRelation=true;
-							newRel = new RelationshipInformation(c.name,secondCls,"--",null);
+							//If no existing relationship found, create one
+							newRel = new RelationshipInformation(c.name,secondCls,"--",null,destMultiplicity);
+							System.out.println("++++++++++++ASSOCIATION REL created between "+c.name+' '+secondCls);
 						}
-											
+						else{
+							newRel = new RelationshipInformation(c.name,secondCls,"--",null,destMultiplicity);
+							System.out.println("***********ASSOCIATION REL created between "+c.name+' '+secondCls);
+						}
+						
 						//Add new relation if was created
-						//System.out.println("+++++++");
 						if(createNewRelation)
 							lstRel.add(newRel);
 					}
 				}
 			}
+			
 		}
 		
 		//Dependency Relationships
-		System.out.println("*********Dependency Relationships");
 		for(ClassInformation c: mapClassNameToInfo.values()){
 			//Check if current class has methods with parameter of type another class OR a method in current class initiates object of type another class
 			if(!c.isInterface)
@@ -151,7 +151,6 @@ public class RelationshipInformation {
 							}
 							else
 								attributeDT=strDT;
-							System.out.println("***********Attribute DT="+attributeDT);
 							String secondCls=attributeDT;
 							
 							//If type of attribute is same as another class and the class it depends on is an Interface
@@ -187,6 +186,13 @@ public class RelationshipInformation {
 				}
 			}
 		}
-		return createNewRelation;
+		else{
+			System.out.println("**********this is 1st dependency relationship for this useCase");
+			createNewRelation=true;
+		}
+		if(createNewRelation)
+			return true;
+		else
+			return false;
 	}
 }
