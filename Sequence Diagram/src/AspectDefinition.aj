@@ -7,7 +7,15 @@ public aspect AspectDefinition {
 
 	pointcut allConstructorCalls() : !within(CustomStack) && !within(Main) && execution(*.new(..));	
 	
-		before() : constructorCalls() {
+	public static class AspectDefinitionInnerClass {
+		private int methodDepth =0 ;
+		private int constructorDepth = 0;
+		//Stack of class names i.e participants
+		private Stack<String> participantStack = new Stack<String>();
+	}
+	
+	AspectDefinitionInnerClass aspectObj = new AspectDefinitionInnerClass();
+	before() : constructorCalls() {
 		System.out.println("**********before Constructor ");
 	}
 	
