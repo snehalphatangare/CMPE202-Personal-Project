@@ -1,20 +1,20 @@
 # Java Parser UML Generator
 There are 2 parts of the program:
-•	Java Parser – The parser reads all the java source code in the provided source path, and creates a grammar language that is interpretable by the UML generator
-•	UML Generator – This part takes input grammar from the JavaParser module and generates a UML diagram
+1.	Java Parser – The parser reads all the java source code in the provided source path, and creates a grammar language that is interpretable by the UML generator
+2.	UML Generator – This part takes input grammar from the JavaParser module and generates a UML diagram
 
 #### Prerequisites
 The following must be installed on the system
-•	Java JDK version 1.8
-•	GraphViz
+  •	Java JDK version 1.8
+  •	GraphViz
 
 #### Running the Program
 Windows/Mac OS:
 1.	Unzip the UMLParser.zip file and cd into the folder. 
-i.	cd <pathname> UMLParser
+  i.	cd <pathname> UMLParser
 2.	Run the jar file by passing the java source file path and output filename
-i.	java -jar umlParser.jar <javafolderpath> <outputimagename>
-ii.	Sample: java -jar umlParser.jar UMLParser/test1 classDiagram
+  i.	java -jar umlParser.jar <javafolderpath> <outputimagename>
+  ii.	Sample: java -jar umlParser.jar UMLParser/test1 classDiagram
 
 #### Libraries and tools used
 1.	Java Parser: 
