@@ -1,5 +1,5 @@
 # Java Parser UML Generator
-There are 2 parts of the program:
+There are 2 parts of the project:
 1.	Java Parser – The parser reads all the java source code in the provided source path, and creates a grammar language that is interpretable by the UML generator
 2.	UML Generator – This part takes input grammar from the JavaParser module and generates a UML diagram
 
