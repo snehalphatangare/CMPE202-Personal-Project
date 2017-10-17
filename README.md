@@ -28,3 +28,24 @@ Installation instructions: http://plantuml.com/graphviz-dot
 For generating the class diagram from the parsed code returned by the java parser, plantUML library is used: http://plantuml.com/
 PlantUML provides a Java based API for using GraphViz software through your Java application. This library is used to integrate GraphViz directly into our application.
 
+## Testing
+
+#### Input
+
+Sample test cases can be found in test folders
+Output
+
+##### Test Case 1
+![testcase1](https://user-images.githubusercontent.com/25491319/31643259-7e1a3fd8-b2a4-11e7-8822-81ae374c8fb5.png)
+
+##### Test Case 2
+![testcase2](https://user-images.githubusercontent.com/25491319/31643347-ece31840-b2a4-11e7-9dc4-64bfc2e8bf4f.png)
+
+##### Test Case 3
+![testcase3](https://user-images.githubusercontent.com/25491319/31643353-f36734a8-b2a4-11e7-8c15-79c6c2443fdb.png)
+
+##### Test Case 4
+![testcase4](https://user-images.githubusercontent.com/25491319/31643358-f8b84b9a-b2a4-11e7-86c6-1a15c7b49e32.png)
+
+##### Test Case 5
+![testcase5](https://user-images.githubusercontent.com/25491319/31643367-0134cae6-b2a5-11e7-885f-1c9004ad392a.png)
