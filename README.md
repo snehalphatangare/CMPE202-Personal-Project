@@ -49,3 +49,6 @@ Output
 
 ##### Test Case 5
 ![testcase5](https://user-images.githubusercontent.com/25491319/31643367-0134cae6-b2a5-11e7-885f-1c9004ad392a.png)
+
+##### Sequence Diagram
+![sequencediagram](https://user-images.githubusercontent.com/25491319/31643532-e626483c-b2a5-11e7-9b66-7b3a4ed86a01.png)
